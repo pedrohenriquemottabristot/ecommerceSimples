@@ -12,8 +12,8 @@ import java.util.List;
 public class PedidoDTO {
     private Long id;
     private String status;
-    private Usuario usuario;  // Usuário em formato de entidade
-    private List<ItemPedido> itens;  // Itens em formato de entidade
+    private Usuario usuario;
+    private List<ItemPedido> itens;
 
 
     public PedidoDTO() {}
