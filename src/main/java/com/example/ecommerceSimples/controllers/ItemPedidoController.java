@@ -1,6 +1,7 @@
 package com.example.ecommerceSimples.controllers;
 
 import com.example.ecommerceSimples.dtos.ItemPedidoDTO;
+import com.example.ecommerceSimples.services.ItemPedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
