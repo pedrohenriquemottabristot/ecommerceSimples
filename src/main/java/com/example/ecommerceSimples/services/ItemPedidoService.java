@@ -1,11 +1,15 @@
 package com.example.ecommerceSimples.services;
 
 import com.example.ecommerceSimples.dtos.ItemPedidoDTO;
+import com.example.ecommerceSimples.dtos.ProdutoDTO;
 import com.example.ecommerceSimples.models.ItemPedido;
+import com.example.ecommerceSimples.models.Produto;
 import com.example.ecommerceSimples.repositories.ItemPedidoRepository;
+import com.example.ecommerceSimples.repositories.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,33 +19,65 @@ public class ItemPedidoService {
     @Autowired
     private ItemPedidoRepository itemPedidoRepository;
 
+    @Autowired
+    private ProdutoRepository produtoRepository;
+
     @Transactional(readOnly = true)
     public ItemPedidoDTO findById(Long id) {
         ItemPedido item = itemPedidoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("ItemPedido não encontrado"));
-        return new ItemPedidoDTO(item.getId(), item.getProdutoId(), item.getNomeProduto(), item.getQuantidade(), item.getPreco());
+
+        Produto produto = produtoRepository.findById(item.getProduto().getId())
+                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+
+        ProdutoDTO produtoDTO = new ProdutoDTO(produto.getId(), produto.getNome(), produto.getPreco(), produto.getDescricao(), produto.getQuantidadeEstoque());
+
+        return new ItemPedidoDTO(item.getId(), produtoDTO, item.getQuantidade(), item.getPreco());
     }
 
     @Transactional(readOnly = true)
     public List<ItemPedidoDTO> findAll() {
         List<ItemPedido> list = itemPedidoRepository.findAll();
-        return list.stream().map(item -> new ItemPedidoDTO(item.getId(), item.getProdutoId(), item.getNomeProduto(), item.getQuantidade(), item.getPreco())).collect(Collectors.toList());
+        return list.stream().map(item -> {
+            Produto produto = produtoRepository.findById(item.getProduto().getId())
+                    .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+            ProdutoDTO produtoDTO = new ProdutoDTO(produto.getId(), produto.getNome(), produto.getPreco(), produto.getDescricao(), produto.getQuantidadeEstoque());
+            return new ItemPedidoDTO(item.getId(), produtoDTO, item.getQuantidade(), item.getPreco());
+        }).collect(Collectors.toList());
     }
 
     @Transactional
     public ItemPedidoDTO create(ItemPedidoDTO dto) {
-        ItemPedido entity = new ItemPedido(dto);
+        Produto produto = produtoRepository.findById(dto.getProduto().getId())
+                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+
+        ItemPedido entity = new ItemPedido();
+        entity.setProduto(produto);
+        entity.setQuantidade(dto.getQuantidade());
+        entity.setPreco(dto.getPreco());
+
         entity = itemPedidoRepository.save(entity);
-        return new ItemPedidoDTO(entity.getId(), entity.getProdutoId(), entity.getNomeProduto(), entity.getQuantidade(), entity.getPreco());
+
+        ProdutoDTO produtoDTO = new ProdutoDTO(produto.getId(), produto.getNome(), produto.getPreco(), produto.getDescricao(), produto.getQuantidadeEstoque());
+        return new ItemPedidoDTO(entity.getId(), produtoDTO, entity.getQuantidade(), entity.getPreco());
     }
 
     @Transactional
     public ItemPedidoDTO update(Long id, ItemPedidoDTO dto) {
         ItemPedido entity = itemPedidoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("ItemPedido não encontrado"));
-        entity.updateFromDTO(dto);
+
+        Produto produto = produtoRepository.findById(dto.getProduto().getId())
+                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+
+        entity.setProduto(produto);
+        entity.setQuantidade(dto.getQuantidade());
+        entity.setPreco(dto.getPreco());
+
         entity = itemPedidoRepository.save(entity);
-        return new ItemPedidoDTO(entity.getId(), entity.getProdutoId(), entity.getNomeProduto(), entity.getQuantidade(), entity.getPreco());
+
+        ProdutoDTO produtoDTO = new ProdutoDTO(produto.getId(), produto.getNome(), produto.getPreco(), produto.getDescricao(), produto.getQuantidadeEstoque());
+        return new ItemPedidoDTO(entity.getId(), produtoDTO, entity.getQuantidade(), entity.getPreco());
     }
 
     @Transactional
@@ -51,4 +87,3 @@ public class ItemPedidoService {
         itemPedidoRepository.delete(entity);
     }
 }
-

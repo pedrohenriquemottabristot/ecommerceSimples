@@ -44,6 +44,8 @@ public class ItemPedido {
     }
 
     public ItemPedido(ItemPedidoDTO dto) {
+        this.quantidade = dto.getQuantidade();
+        this.preco = dto.getPreco();
     }
 
     public Long getProdutoId() {
@@ -54,7 +56,7 @@ public class ItemPedido {
         return produto != null ? produto.getNome() : null;
     }
 
-    public void updateFromDTO(ItemPedidoDTO dto) {
+    public void updateFromDTO(ItemPedidoDTO dto, Produto produto) {
         this.produto = produto;
         this.quantidade = dto.getQuantidade();
         this.preco = dto.getPreco();

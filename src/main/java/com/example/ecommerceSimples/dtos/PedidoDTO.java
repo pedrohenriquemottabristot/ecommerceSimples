@@ -1,6 +1,5 @@
 package com.example.ecommerceSimples.dtos;
 
-import com.example.ecommerceSimples.models.ItemPedido;
 import com.example.ecommerceSimples.models.Usuario;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,14 +11,12 @@ import java.util.List;
 public class PedidoDTO {
     private Long id;
     private String status;
-    private Usuario usuario;
-    private List<ItemPedido> itens;
-
+    private UsuarioDTO usuario; // Mudado para UsuarioDTO
+    private List<ItemPedidoDTO> itens; // Mudado para List<ItemPedidoDTO>
 
     public PedidoDTO() {}
 
-
-    public PedidoDTO(Long id, String status, Usuario usuario, List<ItemPedido> itens) {
+    public PedidoDTO(Long id, String status, UsuarioDTO usuario, List<ItemPedidoDTO> itens) {
         this.id = id;
         this.status = status;
         this.usuario = usuario;

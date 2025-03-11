@@ -8,19 +8,16 @@ import lombok.Setter;
 public class ItemPedidoDTO {
 
     private Long id;
-    private Long produtoId;
-    private String nomeProduto;
+    private ProdutoDTO produto; // Alterado para ProdutoDTO
     private int quantidade;
     private Double preco;
-
 
     public ItemPedidoDTO() {
     }
 
-    public ItemPedidoDTO(Long id, Long produtoId, String nomeProduto, int quantidade, Double preco) {
+    public ItemPedidoDTO(Long id, ProdutoDTO produto, int quantidade, Double preco) {
         this.id = id;
-        this.produtoId = produtoId;
-        this.nomeProduto = nomeProduto;
+        this.produto = produto; // Alterado para ProdutoDTO
         this.quantidade = quantidade;
         this.preco = preco;
     }
