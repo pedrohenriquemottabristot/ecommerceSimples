@@ -29,6 +29,12 @@ public class ItemPedido {
     }
 
     public ItemPedido(ItemPedidoDTO dto, Pedido pedido, Produto produto) {
+        if (pedido == null) {
+            throw new IllegalArgumentException("Pedido não pode ser nulo");
+        }
+        if (produto == null) {
+            throw new IllegalArgumentException("Produto não pode ser nulo");
+        }
         this.pedido = pedido;
         this.produto = produto;
         this.quantidade = dto.getQuantidade();
@@ -36,16 +42,17 @@ public class ItemPedido {
     }
 
     public ItemPedido(Long id, Pedido pedido, Produto produto, int quantidade, Double preco) {
+        if (pedido == null) {
+            throw new IllegalArgumentException("Pedido não pode ser nulo");
+        }
+        if (produto == null) {
+            throw new IllegalArgumentException("Produto não pode ser nulo");
+        }
         this.id = id;
         this.pedido = pedido;
         this.produto = produto;
         this.quantidade = quantidade;
         this.preco = preco;
-    }
-
-    public ItemPedido(ItemPedidoDTO dto) {
-        this.quantidade = dto.getQuantidade();
-        this.preco = dto.getPreco();
     }
 
     public Long getProdutoId() {
@@ -57,6 +64,9 @@ public class ItemPedido {
     }
 
     public void updateFromDTO(ItemPedidoDTO dto, Produto produto) {
+        if (produto == null) {
+            throw new IllegalArgumentException("Produto não pode ser nulo");
+        }
         this.produto = produto;
         this.quantidade = dto.getQuantidade();
         this.preco = dto.getPreco();
